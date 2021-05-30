@@ -1,0 +1,62 @@
+version: '3.7'
+volumes:
+  wp:
+    driver: local
+    name: wordpress
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/srorscha/data/wp
+  db:
+    driver: local
+    name: db
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/srorscha/data/db
+
+networks:
+  we_need_to_go_deeper:
+    name: we_need_to_go_deeper
+    driver: bridge
+
+services:
+ mysql:
+  image: mariadb
+  env_file: .env
+  volumes:
+   - db:/var/lib/mysql
+  restart: always
+  build: db/
+  user: root
+  networks:
+    - we_need_to_go_deeper
+  container_name: mariadb
+ nginx:
+  image: nginx
+  volumes:
+   - wp:/var/www/html
+  depends_on:
+   - wp
+  ports:
+   - "443:443"
+  env_file: .env
+  restart: always
+  build: nginx/
+  user: root
+  networks:
+    - we_need_to_go_deeper
+  container_name: nginx
+ wp:
+  image: wordpress
+  env_file: .env
+  depends_on:
+    - mysql
+  volumes:
+   - wp:/var/www/html
+  restart: always
+  build: wp/
+  user: root
+  networks:
+    - we_need_to_go_deeper
+  container_name: wordpress
