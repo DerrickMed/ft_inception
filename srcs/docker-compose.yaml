@@ -27,7 +27,7 @@ services:
   volumes:
    - db:/var/lib/mysql
   restart: always
-  build: db/
+  build: req/db/
   user: root
   networks:
     - we_need_to_go_deeper
@@ -42,7 +42,7 @@ services:
    - "443:443"
   env_file: .env
   restart: always
-  build: nginx/
+  build: req/nginx/
   user: root
   networks:
     - we_need_to_go_deeper
@@ -55,7 +55,7 @@ services:
   volumes:
    - wp:/var/www/html
   restart: always
-  build: wp/
+  build: req/wp/
   user: root
   networks:
     - we_need_to_go_deeper
