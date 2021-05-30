@@ -1,6 +1,7 @@
 <?php
 # WP SETUP
-
+define('WP_CACHE_KEY_SALT', 'srorscha.42.fr');
+define('WP_CACHE', true);
 define('DB_NAME', 'wp');
 define('DB_USER', 'srorscha');
 define('DB_PASSWORD', 'cool21');

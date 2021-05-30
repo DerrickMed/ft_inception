@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 	sed -i "s/listen = \/run\/php\/php7.3-fpm.sock/listen = 9000/" "/etc/php/7.3/fpm/pool.d/www.conf"
+	sed -i "s/supervised no/supervised systemd/" "/etc/redis/redis.conf"
 	mkdir -p /run/php/
 	touch /run/php/php7.3-fpm.pid
 	chown -R www-data:www-data	/var/www/*
@@ -21,5 +22,7 @@ if [ ! -f /var/www/html/wp-config.php ]; then
 		--admin_password=${WORDPRESS_ADMIN_PASSWORD} \
 		--admin_email=${WORDPRESS_ADMIN_EMAIL}
 	wp user create --allow-root srorscha2 srorcha2@42.fr --user_pass=cool21
+	mv /var/www/object-cache.php /var/www/html/wp-content/
 fi
+service redis-server start
 exec "$@"
